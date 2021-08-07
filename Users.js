@@ -24,32 +24,48 @@ router.post("/", async (req, res) => {
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
-  const user = await  db.query(
+  // const user =  await User.findOne()
+  /// console.log()
+  ///
+  
+   db.query(
     "SELECT * FROM users WHERE username = ?",
     username, (err, results) => {
       if (err) {
         console.log(err);
       }
-    if (!user) res.json({ error: "User Doesn't Exist" });
-console.log(password, results[0]);
-  bcrypt.compare(password, results[0].password,async (match) => {
-console.log(match);
-    if (!match) res.status(401).json({ error: "Wrong Username And Password Combination" });
-
-    try{
-      const accessToken = await sign(
-        { username: user.username, id: user.id },
-        "importantsecret"
-        
-      );
-      res.status(200).json({ token: accessToken, username: username, id: user.id });
       
-    }catch(error){
-      console.log(error);
-    }
+//      [
+//        {
+//          id:'',
+//          userName:'',
+//        }
+//      ]
+    if (!user) res.json({ error: "User Doesn't Exist" });
+  
+      console.log(password, results[0]);
+      
+      
+   const match = await bcrypt.compare(password, results[0].password);
+    console.lg(match)
+//   bcrypt.compare(password, results[0].password,async (match) => {
+//   console.log(match);
+//     if (!match) res.status(401).json({ error: "Wrong Username And Password Combination" });
+
+//     try{
+//       const accessToken = await sign(
+//         { username: user.username, id: user.id },
+//         "importantsecret"
+        
+//       );
+//       res.status(200).json({ token: accessToken, username: username, id: user.id });
+      
+//     }catch(error){
+//       console.log(error);
+//     }
     
     
-  });
+//   });
     });
 
   
